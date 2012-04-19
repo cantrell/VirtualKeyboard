@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Terminal</title>
+
+        <style>
+
+            body {
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                height: 100%;
+                background-color: #000;
+            }
+
+            #terminal {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+                background-color: #000;
+                color: #2abcdf;
+                font-family: Verdana;
+                font-size: 3em;
+                border: 1px solid #2abcdf;
+                padding: 30px;
+            }
+
+
+        </style>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript">
+
+            var SERVER_HOST = 'shorty.home:8000';
+            var socket;
+            var terminal;
+
+            function init() {
+                terminal = id('terminal');
+                socket = io.connect(SERVER_HOST);
+                socket.emit('terminal', null);
+                socket.on('keystroke', function (data) {
+                    var code = data;
+                    if (code == 8) {
+                        terminal.value = terminal.value.substring(0, terminal.value.length - 1);
+                        return;
+                    }
+                    var char = String.fromCharCode(code);
+                    terminal.value += char;
+                });
+            }
+
+            function removeAllChildren(element) { while (element.hasChildNodes()) { element.removeChild(element.firstChild);} };
+            function id(name) { return document.getElementById(name); }
+            function rmUnits(val) { return parseInt(val.substring(0, val.length - 2)) };
+            function mmToPixels(mm, dpi) { return dpi * (mm / 25.4) };
+
+            window.onload = init;
+
+        </script>
+
+    </head>
+    <body>
+        <textarea id="terminal"></textarea>
+    </body>
+</html>
