@@ -1,1 +1,2 @@
-A prototype of a virtual keyboard designed to run on iPads.
+A prototype of a virtual keyboard designed to run on two iPads.
+Written in HTML and requires node.js.
